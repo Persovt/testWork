@@ -12,11 +12,10 @@ export const authSlice = createSlice({
     },
     setHouse: (state, action) => {
       state.house = action.payload.data;
-    }
+    },
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { setData, setHouse } = authSlice.actions;
 
 export default authSlice.reducer;

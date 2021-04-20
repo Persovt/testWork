@@ -1,37 +1,25 @@
 import React, { useEffect } from "react";
-import { Divider, Select } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { setHouse } from "../../state/reducer";
+import { Select } from "antd";
 import { Pagination } from "antd";
 import { List, Typography } from "antd";
 const { Option } = Select;
 
-function onChange(value: any) {
-  console.log(`selected ${value}`);
-}
-
-function onBlur() {
-  console.log("blur");
-}
-
-function onFocus() {
-  console.log("focus");
-}
-
-function onSearch(val: any) {
-  console.log("search:", val);
-}
-
 export const HouseList = (props: any) => {
-  const dispatch = useDispatch();
   const [currectIdHouse, setCurrectIdHouse] = React.useState(1);
   const [currectHouse, setCurrectHouse]: any = React.useState({ data: [] });
   const [perPage, setPerPage] = React.useState(10);
   const [currectPage, setCurrectPage] = React.useState(1);
-  const houseData = props.AuthData.house.length > 0 ? props.AuthData.house : [];
+  const [houseList, setHouseList] = React.useState([]);
+
   useEffect(() => {
-    getHouse(props.AuthData.data?.token.access);
-  }, [props.AuthData.data?.token.access]);
+    fetch("http://test-alpha.reestrdoma.ru/api/reestrdoma/companies/", {
+      headers: {
+        Authorization: `Bearer ${props.AuthData?.data?.token?.access}`,
+      },
+    })
+      .then((res) => res.json())
+      .then(({ data }) => setHouseList(data));
+  }, [props.AuthData?.data?.token?.access]);
 
   useEffect(() => {
     fetch(
@@ -44,42 +32,27 @@ export const HouseList = (props: any) => {
     )
       .then((res) => res.json())
       .then((data) => setCurrectHouse(data));
-  }, [currectIdHouse, currectPage]);
-
-  console.log(currectHouse);
-
-  const getHouse = (token: string) => {
-    fetch("http://test-alpha.reestrdoma.ru/api/reestrdoma/companies/", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => dispatch(setHouse(data)));
-  };
+  }, [currectIdHouse, currectPage, perPage, props.AuthData.data?.token.access]);
 
   return (
     <>
       <Select
         showSearch
         style={{ width: 200 }}
-        placeholder="Select a person"
+        placeholder="Select a house"
         optionFilterProp="children"
         onChange={(value: number) => setCurrectIdHouse(value)}
-        onFocus={onFocus}
-        onBlur={onBlur}
-        onSearch={onSearch}
         filterOption={(input, option) =>
           option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        {houseData?.map((item: any) => (
+        {houseList.map((item: any) => (
           <Option key={item.id} value={item.id}>
             {item.name}
           </Option>
         ))}
       </Select>
-      
+
       <List
         bordered
         dataSource={currectHouse?.data}
@@ -89,7 +62,7 @@ export const HouseList = (props: any) => {
             <List.Item>
               <Typography.Text>
                 id: {item.id} address: {item.address} Кол-во квартир:{" "}
-                {item.reestrFlatCount} Дата: 
+                {item.reestrFlatCount} Дата:
                 {DATE.getDay() +
                   "." +
                   DATE.getMonth() +
