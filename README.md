@@ -1,4 +1,7 @@
 # Why start program ?
-## first on console enter: npm i && npm start
-## Wait... Wait... Wait... Wait...
-## Wow, so cool :3
+## first step
+  on console enter: npm i && npm start
+## second step
+  Wait... Wait... Wait... Wait...
+## third step
+  Wow, so cool :3
