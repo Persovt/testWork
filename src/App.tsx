@@ -1,25 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import { FormProvider } from "antd/lib/form/context";
+import React from "react";
+import { Auth } from "./component/auth/auth.component";
+import { HouseList } from "./component/houseList/houseList.component";
+import { useSelector, useDispatch } from "react-redux";
 function App() {
+  const authData = useSelector((state: any) => state?.auth);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      { !Object.keys(authData.data).length ? (
+        <Auth authStatus={authData} />
+      ) : (
+        <HouseList AuthData={authData} />
+      )}
+    </>
   );
 }
 
