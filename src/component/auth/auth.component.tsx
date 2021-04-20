@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Input, Button } from "antd";
 import { useDispatch } from "react-redux";
 import { setData } from "../../state/reducer";
+
 const layout = {
   labelCol: { span: 8 },
   wrapperCol: { span: 16 },

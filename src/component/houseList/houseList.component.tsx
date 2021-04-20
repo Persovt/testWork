@@ -1,38 +1,41 @@
 import React, { useEffect } from "react";
-import { Select } from "antd";
-import { Pagination } from "antd";
-import { List, Typography } from "antd";
-const { Option } = Select;
+import { Pagination, Select, List, Typography } from "antd";
 
-export const HouseList = (props: any) => {
-  const [currectIdHouse, setCurrectIdHouse] = React.useState(1);
-  const [currectHouse, setCurrectHouse]: any = React.useState({ data: [] });
-  const [perPage, setPerPage] = React.useState(10);
-  const [currectPage, setCurrectPage] = React.useState(1);
-  const [houseList, setHouseList] = React.useState([]);
+const { Option } = Select;
+type AuthDataType = {
+  AuthData: any;
+};
+
+export const HouseList = ({ AuthData }: AuthDataType) => {
+  const [currectIdHouse, setCurrectIdHouse] = React.useState<number>(1);
+  const [perPage, setPerPage] = React.useState<number>(10);
+  const [currectPage, setCurrectPage] = React.useState<number>(1);
+
+  const [currectHouse, setCurrectHouse] = React.useState<any>({ data: [] });
+  const [houseList, setHouseList] = React.useState<any>([]);
 
   useEffect(() => {
     fetch("http://test-alpha.reestrdoma.ru/api/reestrdoma/companies/", {
       headers: {
-        Authorization: `Bearer ${props.AuthData?.data?.token?.access}`,
+        Authorization: `Bearer ${AuthData.token.access}`,
       },
     })
       .then((res) => res.json())
       .then(({ data }) => setHouseList(data));
-  }, [props.AuthData?.data?.token?.access]);
+  }, [AuthData.token.access]);
 
   useEffect(() => {
     fetch(
       `http://test-alpha.reestrdoma.ru/api/reestrdoma/company/houses/${currectIdHouse}/?page=${currectPage}&perPage=${perPage}`,
       {
         headers: {
-          Authorization: `Bearer ${props.AuthData.data?.token.access}`,
+          Authorization: `Bearer ${AuthData.token.access}`,
         },
       }
     )
       .then((res) => res.json())
       .then((data) => setCurrectHouse(data));
-  }, [currectIdHouse, currectPage, perPage, props.AuthData.data?.token.access]);
+  }, [currectIdHouse, currectPage, perPage, AuthData.token.access]);
 
   return (
     <>
@@ -46,7 +49,7 @@ export const HouseList = (props: any) => {
           option?.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
         }
       >
-        {houseList.map((item: any) => (
+        {houseList?.map((item: any) => (
           <Option key={item.id} value={item.id}>
             {item.name}
           </Option>
